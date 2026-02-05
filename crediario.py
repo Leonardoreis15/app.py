@@ -1,57 +1,47 @@
-precoavistacelular = float (input (" Qual o valor avista do celular ? "))
-print()
-entradainicial = precoavistacelular * 0.33 
+import streamlit as st
 
-print ("recomendo dar entrada incial de : ", entradainicial)
-print()
+# Título do Site
+st.title("📱 Simulador de Crediário")
+st.write("---")
 
-entrada = float (input("consegue dar a entrada do valor recomendado ? se sim coloque o valor igual ou acima do que foi informado anteriormente:\n"))
-print()
-if entrada > entradainicial:
-    print("vamos prosseguir")
-    print()
-elif entrada == entradainicial:
-    print("vamos prosseguir")
-    print()
-else:
-    print("vamos negociar a entrada para conseguir atender o seu pedido")
-    print()
+# 1. Valor do Celular
+preco_avista = st.number_input("Qual o valor à vista do celular? (R$)", min_value=0.0, step=100.0)
 
-pagamento = str (input("pagamento é semanal, quinzena ou mensal ? Responda com as seguintes Letras -- S = semanal Q - Quinzena e M - mensal ---?\n"))
-
-if pagamento in ['s' , 'S' , 'Q', 'q']:
-    semanal = 0.15
-    valordojuros = precoavistacelular * semanal 
-    valorfinal = valordojuros + precoavistacelular
-
-
-elif pagamento in ['M' , 'm']:
-    mensal = 0.20
-    valordojuros = precoavistacelular * mensal
-    valorfinal = valordojuros + precoavistacelular
+if preco_avista > 0:
+    # 2. Recomendação de Entrada
+    entradainicial = preco_avista * 0.33
+    st.info(f"💡 Recomendamos uma entrada inicial de: **R$ {entradainicial:.2f}**")
     
-else:
-    valorfinal = "Opção inválida"
-    valordojuros = 0
+    # 3. Campo para a Entrada
+    entrada = st.number_input("Qual o valor da entrada que consegue dar?", min_value=0.0)
     
-print("valor inicial é ", precoavistacelular)
-print("O valor final com o juros é ", valorfinal)
+    if entrada >= entradainicial:
+        st.success("✅ Valor de entrada ótimo! Vamos prosseguir.")
+    else:
+        st.warning("⚠️ Valor abaixo do recomendado. Vamos negociar.")
 
-parcela = int (input(" quantas parcela deseja parcela ? "))
+    # 4. Escolha do Pagamento
+    pagamento = st.selectbox("Forma de pagamento:", ["Semanal / Quinzenal", "Mensal"])
 
-if parcela < 5:
-    valorparcela = valorfinal - entrada
-    print("valor restante que sera parcelado", valorparcela)
-    parcelafinal = valorparcela / parcela
-    print(parcelafinal)
+    if "Semanal" in pagamento:
+        taxa = 0.15
+    else:
+        taxa = 0.20
+
+    # Cálculos
+    valordojuros = preco_avista * taxa
+    valorfinal = valordojuros + preco_avista
     
-elif parcela == 5:
-    valorparcela = valorfinal - entrada
-    print("valor restante que sera parcelado", valorparcela)
-    parcelafinal = valorparcela / parcela
-    print(parcelafinal)
-    
-else:
-    parcela > 5
-    print(" Não podemos fazer mais do 5 parcelas")
-    
+    st.write("---")
+    st.subheader(f"Resumo do Juros: R$ {valordojuros:.2f}")
+    st.header(f"Total Final: R$ {valorfinal:.2f}")
+
+    # 5. Parcelamento
+    parcela = st.slider("Em quantas parcelas deseja dividir?", 1, 10, 5)
+
+    if parcela <= 5:
+        valor_restante = valorfinal - entrada
+        valor_da_parcela = valor_restante / parcela
+        st.metric("Valor de cada parcela", f"R$ {valor_da_parcela:.2f}")
+    else:
+        st.error("❌ Não podemos fazer em mais de 5 parcelas.")
