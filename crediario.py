@@ -39,19 +39,14 @@ if preco_avista > 0:
     # 5. Parcelamento
     # --- DAQUI PARA BAIXO É O QUE DEVES SUBSTITUIR ---
     st.write("---")
-    st.subheader("📊 Simulação de Parcelamento")
+    st.subheader("📊 Opções de Parcelamento")
 
     valor_restante = valorfinal - entrada
     
-    # Criamos as colunas para mostrar as 5 opções de uma vez
-    col1, col2, col3, col4, col5 = st.columns(5)
-    
-    # Lista com as colunas para facilitar o laço 'for'
-    colunas = [col1, col2, col3, col4, col5]
-
+    # Usamos o 'for' para criar cada linha de 1 a 5
     for i in range(1, 6):
         valor_da_parcela = valor_restante / i
-        with colunas[i-1]:
-            st.metric(label=f"{i}x", value=f"R$ {valor_da_parcela:.2f}")
+        # Mostra o texto formatado: "1x de R$ 100.00", "2x de R$ 50.00", etc.
+        st.write(f"**{i}x** de **R$ {valor_da_parcela:.2f}**")
 
-    st.caption("⚠️ Nota: O parcelamento máximo é de 5x conforme a política da loja.")
+    st.caption("⚠️ O parcelamento máximo permitido é de 5 vezes.")
