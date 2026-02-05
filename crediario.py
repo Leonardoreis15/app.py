@@ -37,12 +37,21 @@ if preco_avista > 0:
     st.header(f"Total Final: R$ {valorfinal:.2f}")
 
     # 5. Parcelamento
-    parcela = st.slider("Em quantas parcelas deseja dividir?", 1, 10, 5)
+    # --- DAQUI PARA BAIXO É O QUE DEVES SUBSTITUIR ---
+    st.write("---")
+    st.subheader("📊 Simulação de Parcelamento")
 
-    if parcela <= 5:
-        valor_restante = valorfinal - entrada
-        valor_da_parcela = valor_restante / parcela
-        st.metric("Valor de cada parcela", f"R$ {valor_da_parcela:.2f}")
-    else:
-        st.error("❌ Não podemos fazer em mais de 5 parcelas.")
+    valor_restante = valorfinal - entrada
+    
+    # Criamos as colunas para mostrar as 5 opções de uma vez
+    col1, col2, col3, col4, col5 = st.columns(5)
+    
+    # Lista com as colunas para facilitar o laço 'for'
+    colunas = [col1, col2, col3, col4, col5]
 
+    for i in range(1, 6):
+        valor_da_parcela = valor_restante / i
+        with colunas[i-1]:
+            st.metric(label=f"{i}x", value=f"R$ {valor_da_parcela:.2f}")
+
+    st.caption("⚠️ Nota: O parcelamento máximo é de 5x conforme a política da loja.")
