@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Título do Site
-st.title("📱 Simulador de Crediário")
+st.title("📱  Crediário para celular ")
 st.write("---")
 
 # 1. Valor do Celular
@@ -45,3 +45,4 @@ if preco_avista > 0:
         st.metric("Valor de cada parcela", f"R$ {valor_da_parcela:.2f}")
     else:
         st.error("❌ Não podemos fazer em mais de 5 parcelas.")
+
